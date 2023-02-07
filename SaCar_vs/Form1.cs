@@ -22,6 +22,8 @@ namespace SaCar_vs
         //private List<byte> SerialPortReceiveData = new List<byte>(); //用于存储串口的数据
         string timeStart;//采集开始时间
         int start = 0;//充当指针的作用
+        
+
 
         #region 判断串口是否插入
         public bool search_port_is_exist(String item, String[] port_list)
@@ -212,16 +214,164 @@ namespace SaCar_vs
 
             uiButton2.Enabled = false;
             uiButton1.Enabled = true;
+
+            #region 初始化表格
+            UIBarOption option = new UIBarOption();
+            option.Title = new UITitle();
+            option.Title.Text = "十通道硬点值";
+
+            //设置Legend
+            option.Legend = new UILegend();
+            option.Legend.Orient = UIOrient.Horizontal;
+            option.Legend.Top = UITopAlignment.Top;
+            option.Legend.Left = UILeftAlignment.Left;
+            option.Legend.AddData("硬点值");
+
+            var series = new UIBarSeries();
+            series.Name = "Bar1";
+            series.AddData(0);
+            series.AddData(0);
+            series.AddData(0);
+            series.AddData(0);
+            series.AddData(0);
+            series.AddData(0);
+            series.AddData(0);
+            series.AddData(0);
+            series.AddData(0);
+            series.AddData(0);
+
+            //数据显示小数位数
+            series.DecimalPlaces = 1;
+            option.Series.Add(series);
+
+
+            option.XAxis.Data.Add("通道1");
+            option.XAxis.Data.Add("通道2");
+            option.XAxis.Data.Add("通道3");
+            option.XAxis.Data.Add("通道4");
+            option.XAxis.Data.Add("通道5");
+            option.XAxis.Data.Add("通道6");
+            option.XAxis.Data.Add("通道7");
+            option.XAxis.Data.Add("通道8");
+            option.XAxis.Data.Add("通道9");
+            option.XAxis.Data.Add("通道10");
+
+            option.ToolTip.Visible = true;
+            option.YAxis.Scale = true;
+
+            option.XAxis.Name = "通道";
+            option.XAxis.AxisLabel.Angle = 0;//(0° ~ 90°)
+
+            option.YAxis.Name = "数值";
+
+            //坐标轴显示小数位数
+            option.YAxis.AxisLabel.DecimalPlaces = 1;
+
+            option.YAxisScaleLines.Add(new UIScaleLine() { Color = Color.Red, Name = "上限", Value = 12 });
+            option.YAxisScaleLines.Add(new UIScaleLine() { Color = Color.Gold, Name = "下限", Value = -20 });
+
+            option.ToolTip.AxisPointer.Type = UIAxisPointerType.Shadow;
+
+            option.ShowValue = true;
+
+            uiBarChart1.SetOption(option);
+            #endregion
+
+
+
         }
 
         private void uiButton1_Click(object sender, EventArgs e)
         {
 
+            try
+            {
+                //将可能产生异常的代码放置在try块中
+                //根据当前串口属性来判断是否打开
+                if (serialPort1.IsOpen)
+                {
+                    //串口已经处于打开状态
+                    uiButton2.Enabled = true;
+                    uiButton1.Enabled = false;
+
+                }
+                else
+                {
+                    /* 串口已经处于关闭状态，则设置好串口属性后打开 */
+                    //停止串口扫描
+                    timer1.Stop();
+
+                    uiComboBox1.Enabled = false;
+                    serialPort1.PortName = uiComboBox1.Text;
+                    serialPort1.BaudRate = Convert.ToInt32("115200");
+                    serialPort1.DataBits = Convert.ToInt16("8");
+                    serialPort1.Parity = System.IO.Ports.Parity.None;
+                    serialPort1.StopBits = System.IO.Ports.StopBits.One;
+                    //打开串口，设置状态
+                    serialPort1.Open();
+                    uiButton2.Enabled = true ;
+                    uiButton1.Enabled = false;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //捕获可能发生的异常并进行处理
+
+                //捕获到异常，创建一个新的对象，之前的不可以再用  
+                serialPort1 = new System.IO.Ports.SerialPort(components);
+                serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(serialPort1_DataReceived);
+
+                //响铃并显示异常给用户
+                System.Media.SystemSounds.Beep.Play();
+                MessageBox.Show(ex.Message);
+                uiComboBox1.Enabled = true;
+            }
         }
 
         private void uiButton2_Click(object sender, EventArgs e)
         {
+            try
+            {
 
+
+                //将可能产生异常的代码放置在try块中
+                //根据当前串口属性来判断是否打开
+                if (serialPort1.IsOpen)
+                {
+                    //串口已经处于打开状态
+
+                    serialPort1.Close();    //关闭串口
+                    uiComboBox1.Enabled = true;
+                    uiButton2.Enabled = false;
+                    uiButton1.Enabled = true;
+                    CheckedData.Clear();
+                    start = 0;
+                    //开启端口扫描
+                    timer1.Interval = 1000;
+                    timer1.Start();
+                }
+                else
+                {
+                    /* 串口已经处于关闭状态，则设置好串口属性后打开 */
+                    //停止串口扫描
+                    uiButton2.Enabled = false;
+                    uiButton1.Enabled = true;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //捕获可能发生的异常并进行处理
+
+                //捕获到异常，创建一个新的对象，之前的不可以再用  
+                serialPort1 = new System.IO.Ports.SerialPort(components);
+                serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(serialPort1_DataReceived);
+
+                //响铃并显示异常给用户
+                System.Media.SystemSounds.Beep.Play();
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
