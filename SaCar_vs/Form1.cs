@@ -22,7 +22,8 @@ namespace SaCar_vs
         //private List<byte> SerialPortReceiveData = new List<byte>(); //用于存储串口的数据
         string timeStart;//采集开始时间
         int start = 0;//充当指针的作用
-        
+        double[] numbers = new double[10];//测试用
+
 
 
         #region 判断串口是否插入
@@ -300,6 +301,7 @@ namespace SaCar_vs
                     /* 串口已经处于关闭状态，则设置好串口属性后打开 */
                     //停止串口扫描
                     timer1.Stop();
+                    timer2.Start();
 
                     uiComboBox1.Enabled = false;
                     serialPort1.PortName = uiComboBox1.Text;
@@ -350,6 +352,7 @@ namespace SaCar_vs
                     //开启端口扫描
                     timer1.Interval = 1000;
                     timer1.Start();
+                    timer2.Stop();
                 }
                 else
                 {
@@ -372,6 +375,35 @@ namespace SaCar_vs
                 System.Media.SystemSounds.Beep.Play();
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            Random random = new Random(DateTime.Now.Millisecond);
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                numbers[i] = random.Next(10000);
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                uiBarChart1.Update("Bar1", i, numbers[i]);
+            }
+
+            uiBarChart1.Refresh();
+
+            uiLabel1.Text = numbers[0].ToString("F1");
+            uiLabel2.Text = numbers[1].ToString("F1");
+            uiLabel3.Text = numbers[2].ToString("F1");
+            uiLabel4.Text = numbers[3].ToString("F1");
+            uiLabel5.Text = numbers[4].ToString("F1");
+            uiLabel6.Text = numbers[5].ToString("F1");
+            uiLabel7.Text = numbers[6].ToString("F1");
+            uiLabel8.Text = numbers[7].ToString("F1");
+            uiLabel9.Text = numbers[8].ToString("F1");
+            uiLabel10.Text = numbers[9].ToString("F1");
+
         }
     }
 }
