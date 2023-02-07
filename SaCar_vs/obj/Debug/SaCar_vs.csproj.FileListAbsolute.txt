@@ -1,0 +1,13 @@
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\bin\Debug\SaCar_vs.exe.config
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\bin\Debug\SaCar_vs.exe
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\bin\Debug\SaCar_vs.pdb
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\bin\Debug\SunnyUI.Common.dll
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\bin\Debug\SunnyUI.dll
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.csproj.AssemblyReference.cache
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.Form1.resources
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.Properties.Resources.resources
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.csproj.GenerateResource.cache
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.csproj.CoreCompileInputs.cache
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.csproj.CopyComplete
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.exe
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.pdb
