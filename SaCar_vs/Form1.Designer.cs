@@ -58,12 +58,12 @@ namespace SaCar_vs
             this.uiMarkLabel2 = new Sunny.UI.UIMarkLabel();
             this.uiMarkLabel1 = new Sunny.UI.UIMarkLabel();
             this.uiLabel1 = new Sunny.UI.UILabel();
-            this.uiPanel3 = new Sunny.UI.UIPanel();
-            this.uiComboBox1 = new Sunny.UI.UIComboBox();
-            this.uiBarChart1 = new Sunny.UI.UIBarChart();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.uiPanel3 = new Sunny.UI.UIPanel();
+            this.uiBarChart1 = new Sunny.UI.UIBarChart();
+            this.uiComboBox1 = new Sunny.UI.UIComboBox();
             this.uiPanel1.SuspendLayout();
             this.uiTableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.uiImageButton1)).BeginInit();
@@ -89,15 +89,17 @@ namespace SaCar_vs
             // 
             // uiTableLayoutPanel2
             // 
-            this.uiTableLayoutPanel2.ColumnCount = 4;
+            this.uiTableLayoutPanel2.ColumnCount = 5;
             this.uiTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.uiTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
-            this.uiTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.uiTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.uiTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11F));
+            this.uiTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11F));
+            this.uiTableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8F));
             this.uiTableLayoutPanel2.Controls.Add(this.uiButton1, 2, 0);
             this.uiTableLayoutPanel2.Controls.Add(this.uiButton2, 3, 0);
             this.uiTableLayoutPanel2.Controls.Add(this.uiSmoothLabel1, 1, 0);
             this.uiTableLayoutPanel2.Controls.Add(this.uiImageButton1, 0, 0);
+            this.uiTableLayoutPanel2.Controls.Add(this.uiComboBox1, 4, 0);
             this.uiTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiTableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.uiTableLayoutPanel2.Name = "uiTableLayoutPanel2";
@@ -115,7 +117,7 @@ namespace SaCar_vs
             this.uiButton1.Location = new System.Drawing.Point(717, 3);
             this.uiButton1.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton1.Name = "uiButton1";
-            this.uiButton1.Size = new System.Drawing.Size(147, 89);
+            this.uiButton1.Size = new System.Drawing.Size(106, 89);
             this.uiButton1.TabIndex = 0;
             this.uiButton1.Text = "开始";
             this.uiButton1.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -127,10 +129,10 @@ namespace SaCar_vs
             this.uiButton2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.uiButton2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiButton2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton2.Location = new System.Drawing.Point(870, 3);
+            this.uiButton2.Location = new System.Drawing.Point(829, 3);
             this.uiButton2.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton2.Name = "uiButton2";
-            this.uiButton2.Size = new System.Drawing.Size(148, 89);
+            this.uiButton2.Size = new System.Drawing.Size(106, 89);
             this.uiButton2.TabIndex = 1;
             this.uiButton2.Text = "结束";
             this.uiButton2.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -218,6 +220,7 @@ namespace SaCar_vs
             this.uiTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.uiTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.uiTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.uiTableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.uiTableLayoutPanel1.Size = new System.Drawing.Size(318, 500);
             this.uiTableLayoutPanel1.TabIndex = 0;
             this.uiTableLayoutPanel1.TagString = null;
@@ -462,9 +465,21 @@ namespace SaCar_vs
             this.uiLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.uiLabel1.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
             // 
+            // serialPort1
+            // 
+            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
+            // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // timer2
+            // 
+            this.timer2.Interval = 1000;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
             // uiPanel3
             // 
-            this.uiPanel3.Controls.Add(this.uiComboBox1);
             this.uiPanel3.Controls.Add(this.uiBarChart1);
             this.uiPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiPanel3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -477,23 +492,6 @@ namespace SaCar_vs
             this.uiPanel3.Text = "uiPanel3";
             this.uiPanel3.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             this.uiPanel3.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
-            // 
-            // uiComboBox1
-            // 
-            this.uiComboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.uiComboBox1.DataSource = null;
-            this.uiComboBox1.FillColor = System.Drawing.Color.White;
-            this.uiComboBox1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiComboBox1.Location = new System.Drawing.Point(539, 10);
-            this.uiComboBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.uiComboBox1.MinimumSize = new System.Drawing.Size(63, 0);
-            this.uiComboBox1.Name = "uiComboBox1";
-            this.uiComboBox1.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
-            this.uiComboBox1.Size = new System.Drawing.Size(150, 29);
-            this.uiComboBox1.TabIndex = 1;
-            this.uiComboBox1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-            this.uiComboBox1.Watermark = "";
-            this.uiComboBox1.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
             // 
             // uiBarChart1
             // 
@@ -509,18 +507,25 @@ namespace SaCar_vs
             this.uiBarChart1.Text = "uiBarChart1";
             this.uiBarChart1.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
             // 
-            // serialPort1
+            // uiComboBox1
             // 
-            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
-            // 
-            // timer1
-            // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // timer2
-            // 
-            this.timer2.Interval = 1000;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            this.uiComboBox1.DataSource = null;
+            this.uiComboBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiComboBox1.DropDownAutoWidth = true;
+            this.uiComboBox1.DropDownStyle = Sunny.UI.UIDropDownStyle.DropDownList;
+            this.uiComboBox1.DropDownWidth = 50;
+            this.uiComboBox1.FillColor = System.Drawing.Color.White;
+            this.uiComboBox1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiComboBox1.Location = new System.Drawing.Point(942, 5);
+            this.uiComboBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiComboBox1.MinimumSize = new System.Drawing.Size(63, 0);
+            this.uiComboBox1.Name = "uiComboBox1";
+            this.uiComboBox1.Padding = new System.Windows.Forms.Padding(0, 0, 30, 2);
+            this.uiComboBox1.Size = new System.Drawing.Size(75, 85);
+            this.uiComboBox1.TabIndex = 1;
+            this.uiComboBox1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.uiComboBox1.Watermark = "";
+            this.uiComboBox1.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
             // 
             // Form1
             // 
@@ -550,7 +555,6 @@ namespace SaCar_vs
 
         private Sunny.UI.UIPanel uiPanel1;
         private Sunny.UI.UIPanel uiPanel2;
-        private Sunny.UI.UIPanel uiPanel3;
         private Sunny.UI.UITableLayoutPanel uiTableLayoutPanel1;
         private Sunny.UI.UIMarkLabel uiMarkLabel1;
         private Sunny.UI.UIMarkLabel uiMarkLabel10;
@@ -578,10 +582,11 @@ namespace SaCar_vs
         private Sunny.UI.UIImageButton uiImageButton1;
         private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.Timer timer1;
-        private Sunny.UI.UIComboBox uiComboBox1;
-        public Sunny.UI.UIBarChart uiBarChart1;
         private Sunny.UI.UIButton uiButton2;
         private System.Windows.Forms.Timer timer2;
+        private Sunny.UI.UIComboBox uiComboBox1;
+        private Sunny.UI.UIPanel uiPanel3;
+        public Sunny.UI.UIBarChart uiBarChart1;
     }
 }
 
