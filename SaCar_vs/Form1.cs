@@ -23,6 +23,7 @@ namespace SaCar_vs
         string timeStart;//采集开始时间
         int start = 0;//充当指针的作用
         double[] numbers = new double[10];//测试用
+        int chartP = 0;//充当绘制用的指针
 
 
 
@@ -284,7 +285,7 @@ namespace SaCar_vs
 
         private void uiButton1_Click(object sender, EventArgs e)
         {
-
+            chartP = 0;
             try
             {
                 //将可能产生异常的代码放置在try块中
@@ -379,31 +380,48 @@ namespace SaCar_vs
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            Random random = new Random(DateTime.Now.Millisecond);
-
-            for (int i = 0; i < numbers.Length; i++)
+            while (CheckedData.Count() > chartP +  40)
             {
-                numbers[i] = random.Next(10000);
+                for (int i = 0; i < 10; i++)
+                {
+                    numbers[i] = ToData(CheckedData[chartP], CheckedData[chartP + 1]);
+                    chartP += 4;
+
+                }
+
+
+                for (int i = 0; i < 10; i++)
+                {
+                    uiBarChart1.Update("Bar1", i, numbers[i]);
+                }
+
+
+                uiBarChart1.Refresh();
+
+                uiLabel1.Text = numbers[0].ToString("F1");
+                uiLabel2.Text = numbers[1].ToString("F1");
+                uiLabel3.Text = numbers[2].ToString("F1");
+                uiLabel4.Text = numbers[3].ToString("F1");
+                uiLabel5.Text = numbers[4].ToString("F1");
+                uiLabel6.Text = numbers[5].ToString("F1");
+                uiLabel7.Text = numbers[6].ToString("F1");
+                uiLabel8.Text = numbers[7].ToString("F1");
+                uiLabel9.Text = numbers[8].ToString("F1");
+                uiLabel10.Text = numbers[9].ToString("F1");
+
             }
 
-            for (int i = 0; i < 10; i++)
-            {
-                uiBarChart1.Update("Bar1", i, numbers[i]);
-            }
 
-            uiBarChart1.Refresh();
 
-            uiLabel1.Text = numbers[0].ToString("F1");
-            uiLabel2.Text = numbers[1].ToString("F1");
-            uiLabel3.Text = numbers[2].ToString("F1");
-            uiLabel4.Text = numbers[3].ToString("F1");
-            uiLabel5.Text = numbers[4].ToString("F1");
-            uiLabel6.Text = numbers[5].ToString("F1");
-            uiLabel7.Text = numbers[6].ToString("F1");
-            uiLabel8.Text = numbers[7].ToString("F1");
-            uiLabel9.Text = numbers[8].ToString("F1");
-            uiLabel10.Text = numbers[9].ToString("F1");
+        }
 
+        private double ToData(byte lowByte, byte highByte)
+        {
+            short rawValue = (short)((highByte << 8) | lowByte); // convert to signed short
+
+            double signedValue = Convert.ToDouble(rawValue); // convert to signed double
+
+            return signedValue;
         }
     }
 }
