@@ -25,7 +25,7 @@ namespace SaCar_vs
         private const int RectMargin = 0;//间距
         double threshold = 0;//阈值
         private Thread dataThread;//创建一个新线程
-        private bool _stopThread = false;//用于标定线程状态
+        private ManualResetEvent _stopThreadEvent = new ManualResetEvent(false);//用于标定线程状态
 
 
 
@@ -447,7 +447,9 @@ namespace SaCar_vs
 
         private void DataThreadMethod()
         {
-                 while (!_stopThread && CheckedData.Count() > chartP + 40)
+            while (!_stopThreadEvent.WaitOne(0))
+            {
+                while (CheckedData.Count() > chartP + 40)
                 {
                     for (int i = 0; i < 10; i++)
                     {
@@ -465,23 +467,32 @@ namespace SaCar_vs
                     UpPanel(mypanel9, numbers[8]);
                     UpPanel(mypanel10, numbers[9]);
 
-
-                    Invoke(new Action(() =>
+                    try
                     {
-                        uiLabel1.Text = numbers[0].ToString("F1");
-                        uiLabel2.Text = numbers[1].ToString("F1");
-                        uiLabel3.Text = numbers[2].ToString("F1");
-                        uiLabel4.Text = numbers[3].ToString("F1");
-                        uiLabel5.Text = numbers[4].ToString("F1");
-                        uiLabel6.Text = numbers[5].ToString("F1");
-                        uiLabel7.Text = numbers[6].ToString("F1");
-                        uiLabel8.Text = numbers[7].ToString("F1");
-                        uiLabel9.Text = numbers[8].ToString("F1");
-                        uiLabel10.Text = numbers[9].ToString("F1");
-                    }));
+                        Invoke(new Action(() =>
+                        {
+                            uiLabel1.Text = numbers[0].ToString("F1");
+                            uiLabel2.Text = numbers[1].ToString("F1");
+                            uiLabel3.Text = numbers[2].ToString("F1");
+                            uiLabel4.Text = numbers[3].ToString("F1");
+                            uiLabel5.Text = numbers[4].ToString("F1");
+                            uiLabel6.Text = numbers[5].ToString("F1");
+                            uiLabel7.Text = numbers[6].ToString("F1");
+                            uiLabel8.Text = numbers[7].ToString("F1");
+                            uiLabel9.Text = numbers[8].ToString("F1");
+                            uiLabel10.Text = numbers[9].ToString("F1");
+                        }));
+                    }
+                    catch (Exception)
+                    {
 
+                        throw;
+                    }
+                  
                 }
-                Thread.Sleep(100);
+                
+            }
+            Thread.Sleep(100);
 
 
 
@@ -551,18 +562,22 @@ namespace SaCar_vs
 
         private void StartThread()
         {
-            _stopThread = false;
+  
+            _stopThreadEvent.Reset();
             dataThread = new Thread(DataThreadMethod);
             dataThread.Start();
         }
 
         private void StopThread()
         {
-            _stopThread = true;
-
+   
+            _stopThreadEvent.Set();
             if (dataThread != null)
             {
-                dataThread.Join(); // Wait for thread to exit
+                if (!dataThread.Join(500))
+                {
+                    dataThread.Abort();
+                }
                 dataThread = null;
             }
         }

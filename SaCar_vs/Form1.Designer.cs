@@ -199,9 +199,9 @@ namespace SaCar_vs
             // 
             this.uiTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.uiTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uiTextBox1.DoubleValue = -2400D;
+            this.uiTextBox1.DoubleValue = -7D;
             this.uiTextBox1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiTextBox1.IntValue = -2400;
+            this.uiTextBox1.IntValue = -7;
             this.uiTextBox1.Location = new System.Drawing.Point(961, 5);
             this.uiTextBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.uiTextBox1.MinimumSize = new System.Drawing.Size(1, 16);
@@ -210,7 +210,7 @@ namespace SaCar_vs
             this.uiTextBox1.ShowText = false;
             this.uiTextBox1.Size = new System.Drawing.Size(56, 85);
             this.uiTextBox1.TabIndex = 4;
-            this.uiTextBox1.Text = "-2400";
+            this.uiTextBox1.Text = "-7";
             this.uiTextBox1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
             this.uiTextBox1.Watermark = "";
             this.uiTextBox1.ZoomScaleDisabled = true;
