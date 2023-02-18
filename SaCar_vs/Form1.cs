@@ -26,6 +26,7 @@ namespace SaCar_vs
         double threshold = 0;//阈值
         private Thread dataThread;//创建一个新线程
         private ManualResetEvent _stopThreadEvent = new ManualResetEvent(false);//用于标定线程状态
+        private int framesReceived = 0;
 
 
 
@@ -125,8 +126,6 @@ namespace SaCar_vs
             }
             byte[] received_buf = new byte[num];    //声明一个大小为num的字节数据用于存放读出的byte型数据
 
-
-
             serialPort1.Read(received_buf, 0, num);   //读取接收缓冲区中num个字节到byte数组中
 
             #region 数据校验
@@ -135,19 +134,23 @@ namespace SaCar_vs
             // resize arr
             int count = buffer.Count;
 
+            int bytesIgnored = 0;
+
             while (start + 44 <= count)
             {
                 // head, tail
                 if (buffer[start] != 0xAA || buffer[start + 1] != 0x29 || buffer[start + 43] != 0x80)
                 {
-                    start += 2;
+                    start++;
+                    bytesIgnored++;
                     continue;
                 }
 
                 // CRC8: from  start + 2  to start + 41, check by start + 42
                 if (CRC8(buffer, start + 2, 40) != buffer[start + 42])
                 {
-                    start += 2;
+                    start++;
+                    bytesIgnored++;
                     continue;
                 }
 
@@ -162,7 +165,28 @@ namespace SaCar_vs
                 }
 
                 start += 44;
+                framesReceived++;
             }
+
+            if (bytesIgnored > 0)
+            {
+                DateTime dt = DateTime.Now;
+                Console.WriteLine("{0}:{1}:{2}.{3} {4} frames received, {5} bytes ignored",
+                    dt.Hour, dt.Minute, dt.Second, dt.Millisecond, framesReceived, bytesIgnored);
+                framesReceived = 0;
+            }
+
+            if ( start < count )
+            {
+                List<byte> buf = new List<byte>();
+                buf.AddRange(buffer.GetRange(start, count - start));
+                buffer = buf;
+            }
+            else
+            {
+                buffer.Clear();
+            }
+            start = 0;
 
             #endregion
 
@@ -276,13 +300,11 @@ namespace SaCar_vs
                     else
                     {
 
-                        chartP = 0;
 
 
                         /* 串口已经处于关闭状态，则设置好串口属性后打开 */
                         //停止串口扫描
                         timer1.Stop();
-                        /*timer2.Start();*/
                         StartThread();
 
                         uiComboBox1.Enabled = false;
@@ -342,7 +364,6 @@ namespace SaCar_vs
                     //开启端口扫描
                     timer1.Interval = 1000;
                     timer1.Start();
-                    /*timer2.Stop();*/
                     StopThread();
                 }
                 else
@@ -368,67 +389,46 @@ namespace SaCar_vs
             }
         }
 
-        /*       private void timer2_Tick(object sender, EventArgs e)
-               {
-                   while (CheckedData.Count() > chartP + 40)
-                   {
-                       for (int i = 0; i < 10; i++)
-                       {
-                           numbers[i] = ToData(CheckedData[chartP], CheckedData[chartP + 1]);
-                           chartP += 4;
 
-                       }
-                       UpPanel(mypanel1, numbers[0]);
-                       UpPanel(mypanel2, numbers[1]);
-                       UpPanel(mypanel3, numbers[2]);
-                       UpPanel(mypanel4, numbers[3]);
-                       UpPanel(mypanel5, numbers[4]);
-                       UpPanel(mypanel6, numbers[5]);
-                       UpPanel(mypanel7, numbers[6]);
-                       UpPanel(mypanel8, numbers[7]);
-                       UpPanel(mypanel9, numbers[8]);
-                       UpPanel(mypanel10, numbers[9]);
-
-
-                       uiLabel1.Text = numbers[0].ToString("F1");
-                       uiLabel2.Text = numbers[1].ToString("F1");
-                       uiLabel3.Text = numbers[2].ToString("F1");
-                       uiLabel4.Text = numbers[3].ToString("F1");
-                       uiLabel5.Text = numbers[4].ToString("F1");
-                       uiLabel6.Text = numbers[5].ToString("F1");
-                       uiLabel7.Text = numbers[6].ToString("F1");
-                       uiLabel8.Text = numbers[7].ToString("F1");
-                       uiLabel9.Text = numbers[8].ToString("F1");
-                       uiLabel10.Text = numbers[9].ToString("F1");
-
-                   }
-
-               }*/
-
-       /* private async void timer2_Tick(object sender, EventArgs e)*/
-       /* {
-            await Task.Run(() =>
+        private void DataThreadMethod()
+        {
+            long msRefresh = 0;
+            while (!_stopThreadEvent.WaitOne(0))
             {
-                while (CheckedData.Count() > chartP + 40)
+                if (CheckedData.Count() < chartP + 40)
                 {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        numbers[i] = ToData(CheckedData[chartP], CheckedData[chartP + 1]);
-                        chartP += 4;
-                    }
+                    continue;
+                }
+                
+                for (int i = 0; i < 10; i++)
+                {
+                    numbers[i] = ToData(CheckedData[chartP], CheckedData[chartP + 1]);
+                    chartP += 4;
+                }
 
-                    UpPanel(mypanel1, numbers[0]);
-                    UpPanel(mypanel2, numbers[1]);
-                    UpPanel(mypanel3, numbers[2]);
-                    UpPanel(mypanel4, numbers[3]);
-                    UpPanel(mypanel5, numbers[4]);
-                    UpPanel(mypanel6, numbers[5]);
-                    UpPanel(mypanel7, numbers[6]);
-                    UpPanel(mypanel8, numbers[7]);
-                    UpPanel(mypanel9, numbers[8]);
-                    UpPanel(mypanel10, numbers[9]);
+                bool bRefresh = false;
+                long ms = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                if ( Math.Abs(ms - msRefresh) > 100)
+                {
+                    msRefresh = ms;
+                    bRefresh = true;
+                }
 
-                    Invoke(new Action(() =>
+                BeginInvoke(new Action(() =>
+                {
+
+                    UpPanel(mypanel1, numbers[0], bRefresh);
+                    UpPanel(mypanel2, numbers[1], bRefresh);
+                    UpPanel(mypanel3, numbers[2], bRefresh);
+                    UpPanel(mypanel4, numbers[3], bRefresh);
+                    UpPanel(mypanel5, numbers[4], bRefresh);
+                    UpPanel(mypanel6, numbers[5], bRefresh);
+                    UpPanel(mypanel7, numbers[6], bRefresh);
+                    UpPanel(mypanel8, numbers[7], bRefresh);
+                    UpPanel(mypanel9, numbers[8], bRefresh);
+                    UpPanel(mypanel10, numbers[9], bRefresh);
+
+                    if ( bRefresh )
                     {
                         uiLabel1.Text = numbers[0].ToString("F1");
                         uiLabel2.Text = numbers[1].ToString("F1");
@@ -440,61 +440,11 @@ namespace SaCar_vs
                         uiLabel8.Text = numbers[7].ToString("F1");
                         uiLabel9.Text = numbers[8].ToString("F1");
                         uiLabel10.Text = numbers[9].ToString("F1");
-                    }));
-                }
-            });
-        }*/
-
-        private void DataThreadMethod()
-        {
-            while (!_stopThreadEvent.WaitOne(0))
-            {
-                while (CheckedData.Count() > chartP + 40)
-                {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        numbers[i] = ToData(CheckedData[chartP], CheckedData[chartP + 1]);
-                        chartP += 4;
                     }
-                    UpPanel(mypanel1, numbers[0]);
-                    UpPanel(mypanel2, numbers[1]);
-                    UpPanel(mypanel3, numbers[2]);
-                    UpPanel(mypanel4, numbers[3]);
-                    UpPanel(mypanel5, numbers[4]);
-                    UpPanel(mypanel6, numbers[5]);
-                    UpPanel(mypanel7, numbers[6]);
-                    UpPanel(mypanel8, numbers[7]);
-                    UpPanel(mypanel9, numbers[8]);
-                    UpPanel(mypanel10, numbers[9]);
 
-                    try
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            uiLabel1.Text = numbers[0].ToString("F1");
-                            uiLabel2.Text = numbers[1].ToString("F1");
-                            uiLabel3.Text = numbers[2].ToString("F1");
-                            uiLabel4.Text = numbers[3].ToString("F1");
-                            uiLabel5.Text = numbers[4].ToString("F1");
-                            uiLabel6.Text = numbers[5].ToString("F1");
-                            uiLabel7.Text = numbers[6].ToString("F1");
-                            uiLabel8.Text = numbers[7].ToString("F1");
-                            uiLabel9.Text = numbers[8].ToString("F1");
-                            uiLabel10.Text = numbers[9].ToString("F1");
-                        }));
-                    }
-                    catch (Exception)
-                    {
-
-                        throw;
-                    }
-                  
-                }
-                
+                }));             
             }
             Thread.Sleep(100);
-
-
 
         }
 
@@ -541,7 +491,7 @@ namespace SaCar_vs
             panel.Tag = new Tuple<Rectangle[], bool[]>(rectangles, states);
         }
 
-        private void UpPanel(Mypanel panel, double number)
+        private void UpPanel(Mypanel panel, double number, bool bRefresh)
         {
             Tuple<Rectangle[], bool[]> data = (Tuple<Rectangle[], bool[]>)panel.Tag;
             Rectangle[] rectangles = data.Item1;
@@ -557,7 +507,10 @@ namespace SaCar_vs
             // Set the rightmost rectangle's state based on the random number
             states[rectangles.Length - 1] = number > threshold;
 
-            panel.Invalidate();
+            if ( bRefresh )
+            {
+                panel.Invalidate();
+            }
         }
 
         private void StartThread()
@@ -565,7 +518,10 @@ namespace SaCar_vs
   
             _stopThreadEvent.Reset();
             dataThread = new Thread(DataThreadMethod);
+            dataThread.IsBackground = true;
             dataThread.Start();
+
+
         }
 
         private void StopThread()
