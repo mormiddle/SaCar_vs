@@ -21,12 +21,15 @@ namespace SaCar_vs
         int start = 0;//充当指针的作用
         double[] numbers = new double[10];//测试用
         int chartP = 0;//充当绘制用的指针
-        private const int RectWidth = 30;//矩形宽
+        private const int RectWidth = 5;//矩形宽
         private const int RectMargin = 0;//间距
-        double threshold = 0;//阈值
+        double[] thresholds = new double[10];//十通道阈值
+        /*double threshold = 0;//阈值*/
         private Thread dataThread;//创建一个新线程
         private ManualResetEvent _stopThreadEvent = new ManualResetEvent(false);//用于标定线程状态
         private int framesReceived = 0;
+        private calibration calibrationWindow;//自定义校验窗口
+
 
 
 
@@ -92,8 +95,8 @@ namespace SaCar_vs
                     if (uiComboBox1.Text.Equals(""))
                     {
                         //软件刚启动时，列表项的文本值为空
-                        /*uiComboBox1.Text = uiComboBox1.Items[0].ToString();*/
-                        uiComboBox1.Text = "COM7";
+                        uiComboBox1.Text = uiComboBox1.Items[0].ToString();
+
                     }
                 }
                 else
@@ -260,6 +263,7 @@ namespace SaCar_vs
 
             uiButton2.Enabled = false;
             uiButton1.Enabled = true;
+            uiButton3.Enabled = false;
 
             AddRectToPanel(mypanel1);
             AddRectToPanel(mypanel2);
@@ -272,8 +276,12 @@ namespace SaCar_vs
             AddRectToPanel(mypanel9);
             AddRectToPanel(mypanel10);
 
-
-
+            for (int i = 0; i < 10; i++)
+            {
+                thresholds[i] = 0;
+            }
+            
+            
             this.DoubleBuffered = true;
 
         }
@@ -282,26 +290,23 @@ namespace SaCar_vs
         private void uiButton1_Click(object sender, EventArgs e)
         {
             
+ 
             try
             {
-                threshold = Convert.ToDouble(uiTextBox1.Text);
-                uiTextBox1.Enabled = false;
-                try
+                //将可能产生异常的代码放置在try块中
+                //根据当前串口属性来判断是否打开
+                if (serialPort1.IsOpen)
                 {
-                    //将可能产生异常的代码放置在try块中
-                    //根据当前串口属性来判断是否打开
-                    if (serialPort1.IsOpen)
+                    //串口已经处于打开状态
+                    uiButton2.Enabled = true;
+                    uiButton1.Enabled = false;
+
+                }
+                else
+                {
+
+                    if (!uiComboBox1.Text.Equals(""))
                     {
-                        //串口已经处于打开状态
-                        uiButton2.Enabled = true;
-                        uiButton1.Enabled = false;
-
-                    }
-                    else
-                    {
-
-
-
                         /* 串口已经处于关闭状态，则设置好串口属性后打开 */
                         //停止串口扫描
                         timer1.Stop();
@@ -317,28 +322,31 @@ namespace SaCar_vs
                         serialPort1.Open();
                         uiButton2.Enabled = true;
                         uiButton1.Enabled = false;
-
+                        uiButton3.Enabled = true;
                     }
-                }
-                catch (Exception ex)
-                {
-                    //捕获可能发生的异常并进行处理
+                    else
+                    {
+                        MessageBox.Show("请等待串口连接");
+                    }
 
-                    //捕获到异常，创建一个新的对象，之前的不可以再用  
-                    serialPort1 = new System.IO.Ports.SerialPort(components);
-                    serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(serialPort1_DataReceived);
+                    
 
-                    //响铃并显示异常给用户
-                    System.Media.SystemSounds.Beep.Play();
-                    MessageBox.Show(ex.Message);
-                    uiComboBox1.Enabled = true;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                //捕获可能发生的异常并进行处理
 
-                MessageBox.Show("请输入合适阈值(数字)！");
+                //捕获到异常，创建一个新的对象，之前的不可以再用  
+                serialPort1 = new System.IO.Ports.SerialPort(components);
+                serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(serialPort1_DataReceived);
+
+                //响铃并显示异常给用户
+                System.Media.SystemSounds.Beep.Play();
+                MessageBox.Show(ex.Message);
+                uiComboBox1.Enabled = true;
             }
+
 
             
         }
@@ -353,12 +361,14 @@ namespace SaCar_vs
                 if (serialPort1.IsOpen)
                 {
                     //串口已经处于打开状态
-                    uiTextBox1.Enabled = true;
+                    //串口已经处于打开状态
+                   /* uiTextBox1.Enabled = true;*/
 
                     serialPort1.Close();    //关闭串口
                     uiComboBox1.Enabled = true;
                     uiButton2.Enabled = false;
                     uiButton1.Enabled = true;
+                    uiButton3.Enabled = false;
                     CheckedData.Clear();
                     start = 0;
                     //开启端口扫描
@@ -417,16 +427,16 @@ namespace SaCar_vs
                 BeginInvoke(new Action(() =>
                 {
 
-                    UpPanel(mypanel1, numbers[0], bRefresh);
-                    UpPanel(mypanel2, numbers[1], bRefresh);
-                    UpPanel(mypanel3, numbers[2], bRefresh);
-                    UpPanel(mypanel4, numbers[3], bRefresh);
-                    UpPanel(mypanel5, numbers[4], bRefresh);
-                    UpPanel(mypanel6, numbers[5], bRefresh);
-                    UpPanel(mypanel7, numbers[6], bRefresh);
-                    UpPanel(mypanel8, numbers[7], bRefresh);
-                    UpPanel(mypanel9, numbers[8], bRefresh);
-                    UpPanel(mypanel10, numbers[9], bRefresh);
+                    UpPanel(mypanel1, numbers[0], thresholds[0], bRefresh);
+                    UpPanel(mypanel2, numbers[1], thresholds[1], bRefresh);
+                    UpPanel(mypanel3, numbers[2], thresholds[2], bRefresh);
+                    UpPanel(mypanel4, numbers[3], thresholds[3], bRefresh);
+                    UpPanel(mypanel5, numbers[4], thresholds[4], bRefresh);
+                    UpPanel(mypanel6, numbers[5], thresholds[5], bRefresh);
+                    UpPanel(mypanel7, numbers[6], thresholds[6], bRefresh);
+                    UpPanel(mypanel8, numbers[7], thresholds[7], bRefresh);
+                    UpPanel(mypanel9, numbers[8], thresholds[8], bRefresh);
+                    UpPanel(mypanel10, numbers[9], thresholds[9], bRefresh);
 
                     if ( bRefresh )
                     {
@@ -491,7 +501,7 @@ namespace SaCar_vs
             panel.Tag = new Tuple<Rectangle[], bool[]>(rectangles, states);
         }
 
-        private void UpPanel(Mypanel panel, double number, bool bRefresh)
+        private void UpPanel(Mypanel panel, double number, double threshold, bool bRefresh)
         {
             Tuple<Rectangle[], bool[]> data = (Tuple<Rectangle[], bool[]>)panel.Tag;
             Rectangle[] rectangles = data.Item1;
@@ -537,5 +547,47 @@ namespace SaCar_vs
                 dataThread = null;
             }
         }
+
+        private void uiButton3_Click(object sender, EventArgs e)
+        {
+            if (!uiLabel1.Text.Equals(""))
+            {
+                thresholds[0] = Convert.ToDouble(uiLabel1.Text) + 10;
+                thresholds[1] = Convert.ToDouble(uiLabel2.Text) + 10;
+                thresholds[2] = Convert.ToDouble(uiLabel3.Text) + 10;
+                thresholds[3] = Convert.ToDouble(uiLabel4.Text) + 10;
+                thresholds[4] = Convert.ToDouble(uiLabel5.Text) + 10;
+                thresholds[5] = Convert.ToDouble(uiLabel6.Text) + 10;
+                thresholds[6] = Convert.ToDouble(uiLabel7.Text) + 10;
+                thresholds[7] = Convert.ToDouble(uiLabel8.Text) + 10;
+                thresholds[8] = Convert.ToDouble(uiLabel9.Text) + 10;
+                thresholds[9] = Convert.ToDouble(uiLabel10.Text) + 10;
+            }
+            else
+            {
+                MessageBox.Show("未收到串口数据，请检查串口是否选择正确");
+            }
+            
+        }
+
+        private void uiButton5_Click(object sender, EventArgs e)
+        {
+            calibrationWindow = new calibration(numbers);//自定义校验窗口
+            calibrationWindow.WindowClosed += MyNewWindow_WindowClosed;
+            calibrationWindow.Show();
+      
+
+        }
+
+        private void MyNewWindow_WindowClosed(object sender, double[] e)
+        {
+            thresholds = e;
+
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine(thresholds[i] + "\n");
+            }
+        }
+
     }
 }
