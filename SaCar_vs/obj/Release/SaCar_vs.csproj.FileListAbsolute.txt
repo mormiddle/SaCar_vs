@@ -11,3 +11,4 @@ F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Release\SaCar_vs.csproj.CoreCompileInputs.c
 F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Release\SaCar_vs.csproj.CopyComplete
 F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Release\SaCar_vs.exe
 F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Release\SaCar_vs.pdb
+F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Release\SaCar_vs.calibration.resources

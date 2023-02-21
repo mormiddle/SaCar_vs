@@ -29,6 +29,7 @@ namespace SaCar_vs
         private ManualResetEvent _stopThreadEvent = new ManualResetEvent(false);//用于标定线程状态
         private int framesReceived = 0;
         private calibration calibrationWindow;//自定义校验窗口
+        private double precision = 10.0;//校准精度
 
 
 
@@ -280,8 +281,10 @@ namespace SaCar_vs
             {
                 thresholds[i] = 0;
             }
-            
-            
+
+           
+
+
             this.DoubleBuffered = true;
 
         }
@@ -514,8 +517,27 @@ namespace SaCar_vs
                 states[j - 1] = states[j];
             }
 
-            // Set the rightmost rectangle's state based on the random number
-            states[rectangles.Length - 1] = number > threshold;
+            /*// Set the rightmost rectangle's state based on the random number
+            states[rectangles.Length - 1] = number > threshold + precision;*/
+
+            // Calculate the distance from the threshold
+            double distance = Math.Abs(number - threshold);
+
+            // Set the rightmost rectangle's state based on the distance from the threshold
+            if (distance <= precision)
+            {
+                // The number is within the precision range of the threshold, so color the rectangle red
+                states[rectangles.Length - 1] = false;
+            }
+            else
+            {
+                // The number is outside the precision range of the threshold, so adjust the color of the red based on the distance
+                int redValue = Math.Min((int)(255 * (distance - precision) / (1 - threshold + precision)), 255);
+                Color color = Color.FromArgb(redValue, 0, 0);
+                SolidBrush brush = new SolidBrush(color);
+                states[rectangles.Length - 1] = true;
+            }
+
 
             if ( bRefresh )
             {
@@ -552,16 +574,16 @@ namespace SaCar_vs
         {
             if (!uiLabel1.Text.Equals(""))
             {
-                thresholds[0] = Convert.ToDouble(uiLabel1.Text) + 10;
-                thresholds[1] = Convert.ToDouble(uiLabel2.Text) + 10;
-                thresholds[2] = Convert.ToDouble(uiLabel3.Text) + 10;
-                thresholds[3] = Convert.ToDouble(uiLabel4.Text) + 10;
-                thresholds[4] = Convert.ToDouble(uiLabel5.Text) + 10;
-                thresholds[5] = Convert.ToDouble(uiLabel6.Text) + 10;
-                thresholds[6] = Convert.ToDouble(uiLabel7.Text) + 10;
-                thresholds[7] = Convert.ToDouble(uiLabel8.Text) + 10;
-                thresholds[8] = Convert.ToDouble(uiLabel9.Text) + 10;
-                thresholds[9] = Convert.ToDouble(uiLabel10.Text) + 10;
+                thresholds[0] = Convert.ToDouble(uiLabel1.Text);
+                thresholds[1] = Convert.ToDouble(uiLabel2.Text);
+                thresholds[2] = Convert.ToDouble(uiLabel3.Text);
+                thresholds[3] = Convert.ToDouble(uiLabel4.Text);
+                thresholds[4] = Convert.ToDouble(uiLabel5.Text);
+                thresholds[5] = Convert.ToDouble(uiLabel6.Text);
+                thresholds[6] = Convert.ToDouble(uiLabel7.Text);
+                thresholds[7] = Convert.ToDouble(uiLabel8.Text);
+                thresholds[8] = Convert.ToDouble(uiLabel9.Text);
+                thresholds[9] = Convert.ToDouble(uiLabel10.Text);
             }
             else
             {
@@ -581,13 +603,21 @@ namespace SaCar_vs
 
         private void MyNewWindow_WindowClosed(object sender, double[] e)
         {
-            thresholds = e;
+            for (int i = 0; i < 10; i++)
+            {
+                if (e[i] != 0.0)
+                {
+                    thresholds[i] = e[i];
+                }
+            }
+
 
             for (int i = 0; i < 10; i++)
             {
                 Console.WriteLine(thresholds[i] + "\n");
             }
         }
+
 
     }
 }
