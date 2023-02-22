@@ -443,16 +443,16 @@ namespace SaCar_vs
 
                     if ( bRefresh )
                     {
-                        uiLabel1.Text = numbers[0].ToString("F1");
-                        uiLabel2.Text = numbers[1].ToString("F1");
-                        uiLabel3.Text = numbers[2].ToString("F1");
-                        uiLabel4.Text = numbers[3].ToString("F1");
-                        uiLabel5.Text = numbers[4].ToString("F1");
-                        uiLabel6.Text = numbers[5].ToString("F1");
-                        uiLabel7.Text = numbers[6].ToString("F1");
-                        uiLabel8.Text = numbers[7].ToString("F1");
-                        uiLabel9.Text = numbers[8].ToString("F1");
-                        uiLabel10.Text = numbers[9].ToString("F1");
+                        uiLabel1.Text = (numbers[0] - thresholds[0]).ToString("F1");
+                        uiLabel2.Text = (numbers[1] - thresholds[1]).ToString("F1");
+                        uiLabel3.Text = (numbers[2] - thresholds[2]).ToString("F1");
+                        uiLabel4.Text = (numbers[3] - thresholds[3]).ToString("F1");
+                        uiLabel5.Text = (numbers[4] - thresholds[4]).ToString("F1");
+                        uiLabel6.Text = (numbers[5] - thresholds[5]).ToString("F1");
+                        uiLabel7.Text = (numbers[6] - thresholds[6]).ToString("F1");
+                        uiLabel8.Text = (numbers[7] - thresholds[7]).ToString("F1");
+                        uiLabel9.Text = (numbers[8] - thresholds[8]).ToString("F1");
+                        uiLabel10.Text = (numbers[9] - thresholds[9]).ToString("F1");
                     }
 
                 }));             
@@ -475,12 +475,14 @@ namespace SaCar_vs
         {
             Rectangle[] rectangles = new Rectangle[panel.Width / (RectWidth + RectMargin)];
             bool[] states = new bool[rectangles.Length];
+            int[] redValues = new int[rectangles.Length];
             for (int j = 0; j < rectangles.Length; j++)
             {
                 int x = j * (RectWidth + RectMargin);
                 int y = 0;
                 rectangles[j] = new Rectangle(x, y, RectWidth, panel.Height);
                 states[j] = false; // Default state is blue
+                redValues[j] = 0; // Default red value is 0
             }
 
             panel.Paint += (sender, e) =>
@@ -492,7 +494,7 @@ namespace SaCar_vs
                     Rectangle rect = rectangles[j];
 
                     // Fill the rectangle with the appropriate color
-                    Color color = states[j] ? Color.FromArgb(255, 69, 0): Color.FromArgb(80, 160, 255);
+                    Color color = states[j] ? Color.FromArgb(redValues[j], 0, 0): Color.FromArgb(80, 160, 255);
                     SolidBrush brush = new SolidBrush(color);
                     graphics.FillRectangle(brush, rect);
 
@@ -501,20 +503,26 @@ namespace SaCar_vs
                 }
             };
 
-            panel.Tag = new Tuple<Rectangle[], bool[]>(rectangles, states);
+            panel.Tag = new Tuple<Rectangle[], bool[], int[]>(rectangles, states, redValues);
+           /* panel.Tag = new Tuple<Rectangle[], bool[]>(rectangles, states);*/
         }
 
         private void UpPanel(Mypanel panel, double number, double threshold, bool bRefresh)
         {
-            Tuple<Rectangle[], bool[]> data = (Tuple<Rectangle[], bool[]>)panel.Tag;
+            Tuple<Rectangle[], bool[], int[]> data = (Tuple<Rectangle[], bool[], int[]>)panel.Tag;
+            /*Tuple<Rectangle[], bool[]> data = (Tuple<Rectangle[], bool[]>)panel.Tag;
+            Rectangle[] rectangles = data.Item1;
+            bool[] states = data.Item2;*/
             Rectangle[] rectangles = data.Item1;
             bool[] states = data.Item2;
+            int[] redValues = data.Item3;
 
 
             // Move the states of the other rectangles one position to the left
             for (int j = 1; j < rectangles.Length; j++)
             {
                 states[j - 1] = states[j];
+                redValues[j - 1] = redValues[j];
             }
 
             /*// Set the rightmost rectangle's state based on the random number
@@ -528,14 +536,14 @@ namespace SaCar_vs
             {
                 // The number is within the precision range of the threshold, so color the rectangle red
                 states[rectangles.Length - 1] = false;
+                redValues[rectangles.Length - 1] = 0;
             }
             else
             {
                 // The number is outside the precision range of the threshold, so adjust the color of the red based on the distance
-                int redValue = Math.Min((int)(255 * (distance - precision) / (1 - threshold + precision)), 255);
-                Color color = Color.FromArgb(redValue, 0, 0);
-                SolidBrush brush = new SolidBrush(color);
+                int redValue = Math.Max((int)(255 * (1 - (distance - precision) / (1 - threshold + precision))), 0);
                 states[rectangles.Length - 1] = true;
+                redValues[rectangles.Length - 1] = redValue;
             }
 
 
