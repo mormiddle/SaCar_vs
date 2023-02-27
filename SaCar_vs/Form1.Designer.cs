@@ -45,8 +45,18 @@ namespace SaCar_vs
             this.uiButton3 = new Sunny.UI.UIButton();
             this.uiButton4 = new Sunny.UI.UIButton();
             this.uiButton5 = new Sunny.UI.UIButton();
+            this.uiButton6 = new Sunny.UI.UIButton();
             this.uiPanel2 = new Sunny.UI.UIPanel();
             this.uiTableLayoutPanel1 = new Sunny.UI.UITableLayoutPanel();
+            this.mypanel10 = new SaCar_vs.Mypanel();
+            this.mypanel9 = new SaCar_vs.Mypanel();
+            this.mypanel8 = new SaCar_vs.Mypanel();
+            this.mypanel7 = new SaCar_vs.Mypanel();
+            this.mypanel6 = new SaCar_vs.Mypanel();
+            this.mypanel5 = new SaCar_vs.Mypanel();
+            this.mypanel4 = new SaCar_vs.Mypanel();
+            this.mypanel3 = new SaCar_vs.Mypanel();
+            this.mypanel2 = new SaCar_vs.Mypanel();
             this.uiLabel10 = new Sunny.UI.UILabel();
             this.uiLabel9 = new Sunny.UI.UILabel();
             this.uiLabel8 = new Sunny.UI.UILabel();
@@ -67,15 +77,6 @@ namespace SaCar_vs
             this.uiMarkLabel2 = new Sunny.UI.UIMarkLabel();
             this.uiMarkLabel1 = new Sunny.UI.UIMarkLabel();
             this.uiLabel1 = new Sunny.UI.UILabel();
-            this.mypanel10 = new SaCar_vs.Mypanel();
-            this.mypanel9 = new SaCar_vs.Mypanel();
-            this.mypanel8 = new SaCar_vs.Mypanel();
-            this.mypanel7 = new SaCar_vs.Mypanel();
-            this.mypanel6 = new SaCar_vs.Mypanel();
-            this.mypanel5 = new SaCar_vs.Mypanel();
-            this.mypanel4 = new SaCar_vs.Mypanel();
-            this.mypanel3 = new SaCar_vs.Mypanel();
-            this.mypanel2 = new SaCar_vs.Mypanel();
             this.mypanel1 = new SaCar_vs.Mypanel();
             this.uiPanel1.SuspendLayout();
             this.uiTableLayoutPanel2.SuspendLayout();
@@ -178,16 +179,18 @@ namespace SaCar_vs
             this.uiTableLayoutPanel3.Controls.Add(this.uiButton3, 0, 3);
             this.uiTableLayoutPanel3.Controls.Add(this.uiButton4, 0, 4);
             this.uiTableLayoutPanel3.Controls.Add(this.uiButton5, 0, 5);
+            this.uiTableLayoutPanel3.Controls.Add(this.uiButton6, 0, 6);
             this.uiTableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiTableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
             this.uiTableLayoutPanel3.Name = "uiTableLayoutPanel3";
-            this.uiTableLayoutPanel3.RowCount = 6;
+            this.uiTableLayoutPanel3.RowCount = 7;
             this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18F));
-            this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18F));
-            this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18F));
-            this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18F));
-            this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18F));
+            this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.uiTableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.uiTableLayoutPanel3.Size = new System.Drawing.Size(130, 500);
             this.uiTableLayoutPanel3.TabIndex = 0;
             this.uiTableLayoutPanel3.TagString = null;
@@ -197,10 +200,10 @@ namespace SaCar_vs
             this.uiButton2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.uiButton2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiButton2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton2.Location = new System.Drawing.Point(3, 143);
+            this.uiButton2.Location = new System.Drawing.Point(3, 128);
             this.uiButton2.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton2.Name = "uiButton2";
-            this.uiButton2.Size = new System.Drawing.Size(124, 84);
+            this.uiButton2.Size = new System.Drawing.Size(124, 69);
             this.uiButton2.TabIndex = 4;
             this.uiButton2.Text = "结束";
             this.uiButton2.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -215,7 +218,7 @@ namespace SaCar_vs
             this.uiButton1.Location = new System.Drawing.Point(3, 53);
             this.uiButton1.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton1.Name = "uiButton1";
-            this.uiButton1.Size = new System.Drawing.Size(124, 84);
+            this.uiButton1.Size = new System.Drawing.Size(124, 69);
             this.uiButton1.TabIndex = 3;
             this.uiButton1.Text = "开始";
             this.uiButton1.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -247,10 +250,10 @@ namespace SaCar_vs
             this.uiButton3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.uiButton3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiButton3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton3.Location = new System.Drawing.Point(3, 233);
+            this.uiButton3.Location = new System.Drawing.Point(3, 203);
             this.uiButton3.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton3.Name = "uiButton3";
-            this.uiButton3.Size = new System.Drawing.Size(124, 84);
+            this.uiButton3.Size = new System.Drawing.Size(124, 69);
             this.uiButton3.TabIndex = 5;
             this.uiButton3.Text = "校验";
             this.uiButton3.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -263,29 +266,47 @@ namespace SaCar_vs
             this.uiButton4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uiButton4.Enabled = false;
             this.uiButton4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton4.Location = new System.Drawing.Point(3, 323);
+            this.uiButton4.Location = new System.Drawing.Point(3, 278);
             this.uiButton4.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton4.Name = "uiButton4";
-            this.uiButton4.Size = new System.Drawing.Size(124, 84);
+            this.uiButton4.Size = new System.Drawing.Size(124, 69);
             this.uiButton4.TabIndex = 6;
-            this.uiButton4.Text = "绘制";
+            this.uiButton4.Text = "自定义校验";
             this.uiButton4.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiButton4.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.uiButton4.Click += new System.EventHandler(this.uiButton4_Click);
             // 
             // uiButton5
             // 
             this.uiButton5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.uiButton5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiButton5.Enabled = false;
             this.uiButton5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiButton5.Location = new System.Drawing.Point(3, 413);
+            this.uiButton5.Location = new System.Drawing.Point(3, 353);
             this.uiButton5.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton5.Name = "uiButton5";
-            this.uiButton5.Size = new System.Drawing.Size(124, 84);
+            this.uiButton5.Size = new System.Drawing.Size(124, 69);
             this.uiButton5.TabIndex = 7;
-            this.uiButton5.Text = "自定义校验";
+            this.uiButton5.Text = "开始记录";
             this.uiButton5.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiButton5.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
             this.uiButton5.Click += new System.EventHandler(this.uiButton5_Click);
+            // 
+            // uiButton6
+            // 
+            this.uiButton6.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiButton6.Enabled = false;
+            this.uiButton6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton6.Location = new System.Drawing.Point(3, 428);
+            this.uiButton6.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiButton6.Name = "uiButton6";
+            this.uiButton6.Size = new System.Drawing.Size(124, 69);
+            this.uiButton6.TabIndex = 8;
+            this.uiButton6.Text = "结束记录(保存)";
+            this.uiButton6.TipsFont = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiButton6.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.uiButton6.Click += new System.EventHandler(this.uiButton6_Click);
             // 
             // uiPanel2
             // 
@@ -355,6 +376,87 @@ namespace SaCar_vs
             this.uiTableLayoutPanel1.Size = new System.Drawing.Size(891, 500);
             this.uiTableLayoutPanel1.TabIndex = 0;
             this.uiTableLayoutPanel1.TagString = null;
+            // 
+            // mypanel10
+            // 
+            this.mypanel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mypanel10.Location = new System.Drawing.Point(118, 453);
+            this.mypanel10.Name = "mypanel10";
+            this.mypanel10.Size = new System.Drawing.Size(770, 44);
+            this.mypanel10.TabIndex = 29;
+            this.mypanel10.Text = "mypanel10";
+            // 
+            // mypanel9
+            // 
+            this.mypanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mypanel9.Location = new System.Drawing.Point(118, 403);
+            this.mypanel9.Name = "mypanel9";
+            this.mypanel9.Size = new System.Drawing.Size(770, 44);
+            this.mypanel9.TabIndex = 28;
+            this.mypanel9.Text = "mypanel9";
+            // 
+            // mypanel8
+            // 
+            this.mypanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mypanel8.Location = new System.Drawing.Point(118, 353);
+            this.mypanel8.Name = "mypanel8";
+            this.mypanel8.Size = new System.Drawing.Size(770, 44);
+            this.mypanel8.TabIndex = 27;
+            this.mypanel8.Text = "mypanel8";
+            // 
+            // mypanel7
+            // 
+            this.mypanel7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mypanel7.Location = new System.Drawing.Point(118, 303);
+            this.mypanel7.Name = "mypanel7";
+            this.mypanel7.Size = new System.Drawing.Size(770, 44);
+            this.mypanel7.TabIndex = 26;
+            this.mypanel7.Text = "mypanel7";
+            // 
+            // mypanel6
+            // 
+            this.mypanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mypanel6.Location = new System.Drawing.Point(118, 253);
+            this.mypanel6.Name = "mypanel6";
+            this.mypanel6.Size = new System.Drawing.Size(770, 44);
+            this.mypanel6.TabIndex = 25;
+            this.mypanel6.Text = "mypanel6";
+            // 
+            // mypanel5
+            // 
+            this.mypanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mypanel5.Location = new System.Drawing.Point(118, 203);
+            this.mypanel5.Name = "mypanel5";
+            this.mypanel5.Size = new System.Drawing.Size(770, 44);
+            this.mypanel5.TabIndex = 24;
+            this.mypanel5.Text = "mypanel5";
+            // 
+            // mypanel4
+            // 
+            this.mypanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mypanel4.Location = new System.Drawing.Point(118, 153);
+            this.mypanel4.Name = "mypanel4";
+            this.mypanel4.Size = new System.Drawing.Size(770, 44);
+            this.mypanel4.TabIndex = 23;
+            this.mypanel4.Text = "mypanel4";
+            // 
+            // mypanel3
+            // 
+            this.mypanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mypanel3.Location = new System.Drawing.Point(118, 103);
+            this.mypanel3.Name = "mypanel3";
+            this.mypanel3.Size = new System.Drawing.Size(770, 44);
+            this.mypanel3.TabIndex = 22;
+            this.mypanel3.Text = "mypanel3";
+            // 
+            // mypanel2
+            // 
+            this.mypanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mypanel2.Location = new System.Drawing.Point(118, 53);
+            this.mypanel2.Name = "mypanel2";
+            this.mypanel2.Size = new System.Drawing.Size(770, 44);
+            this.mypanel2.TabIndex = 21;
+            this.mypanel2.Text = "mypanel2";
             // 
             // uiLabel10
             // 
@@ -596,87 +698,6 @@ namespace SaCar_vs
             this.uiLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.uiLabel1.ZoomScaleRect = new System.Drawing.Rectangle(0, 0, 0, 0);
             // 
-            // mypanel10
-            // 
-            this.mypanel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mypanel10.Location = new System.Drawing.Point(118, 453);
-            this.mypanel10.Name = "mypanel10";
-            this.mypanel10.Size = new System.Drawing.Size(770, 44);
-            this.mypanel10.TabIndex = 29;
-            this.mypanel10.Text = "mypanel10";
-            // 
-            // mypanel9
-            // 
-            this.mypanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mypanel9.Location = new System.Drawing.Point(118, 403);
-            this.mypanel9.Name = "mypanel9";
-            this.mypanel9.Size = new System.Drawing.Size(770, 44);
-            this.mypanel9.TabIndex = 28;
-            this.mypanel9.Text = "mypanel9";
-            // 
-            // mypanel8
-            // 
-            this.mypanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mypanel8.Location = new System.Drawing.Point(118, 353);
-            this.mypanel8.Name = "mypanel8";
-            this.mypanel8.Size = new System.Drawing.Size(770, 44);
-            this.mypanel8.TabIndex = 27;
-            this.mypanel8.Text = "mypanel8";
-            // 
-            // mypanel7
-            // 
-            this.mypanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mypanel7.Location = new System.Drawing.Point(118, 303);
-            this.mypanel7.Name = "mypanel7";
-            this.mypanel7.Size = new System.Drawing.Size(770, 44);
-            this.mypanel7.TabIndex = 26;
-            this.mypanel7.Text = "mypanel7";
-            // 
-            // mypanel6
-            // 
-            this.mypanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mypanel6.Location = new System.Drawing.Point(118, 253);
-            this.mypanel6.Name = "mypanel6";
-            this.mypanel6.Size = new System.Drawing.Size(770, 44);
-            this.mypanel6.TabIndex = 25;
-            this.mypanel6.Text = "mypanel6";
-            // 
-            // mypanel5
-            // 
-            this.mypanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mypanel5.Location = new System.Drawing.Point(118, 203);
-            this.mypanel5.Name = "mypanel5";
-            this.mypanel5.Size = new System.Drawing.Size(770, 44);
-            this.mypanel5.TabIndex = 24;
-            this.mypanel5.Text = "mypanel5";
-            // 
-            // mypanel4
-            // 
-            this.mypanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mypanel4.Location = new System.Drawing.Point(118, 153);
-            this.mypanel4.Name = "mypanel4";
-            this.mypanel4.Size = new System.Drawing.Size(770, 44);
-            this.mypanel4.TabIndex = 23;
-            this.mypanel4.Text = "mypanel4";
-            // 
-            // mypanel3
-            // 
-            this.mypanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mypanel3.Location = new System.Drawing.Point(118, 103);
-            this.mypanel3.Name = "mypanel3";
-            this.mypanel3.Size = new System.Drawing.Size(770, 44);
-            this.mypanel3.TabIndex = 22;
-            this.mypanel3.Text = "mypanel3";
-            // 
-            // mypanel2
-            // 
-            this.mypanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mypanel2.Location = new System.Drawing.Point(118, 53);
-            this.mypanel2.Name = "mypanel2";
-            this.mypanel2.Size = new System.Drawing.Size(770, 44);
-            this.mypanel2.TabIndex = 21;
-            this.mypanel2.Text = "mypanel2";
-            // 
             // mypanel1
             // 
             this.mypanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -761,6 +782,7 @@ namespace SaCar_vs
         private Sunny.UI.UIButton uiButton3;
         private Sunny.UI.UIButton uiButton4;
         private Sunny.UI.UIButton uiButton5;
+        private Sunny.UI.UIButton uiButton6;
     }
 }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,7 +18,7 @@ namespace SaCar_vs
         private List<byte> buffer = new List<byte>(); //设置缓存处理CRC32串口的校验
         public static bool intimewindowIsOpen = false; //判断波形窗口是否创建
         List<byte> CheckedData = new List<byte>();//申请一个大容量的数组
-        //private List<byte> SerialPortReceiveData = new List<byte>(); //用于存储串口的数据
+        //private List<byte> SaveDate = new List<byte>(); //用于存储串口的数据
         int start = 0;//充当指针的作用
         double[] numbers = new double[10];//测试用
         int chartP = 0;//充当绘制用的指针
@@ -30,6 +31,9 @@ namespace SaCar_vs
         private int framesReceived = 0;
         private calibration calibrationWindow;//自定义校验窗口
         private double precision = 10.0;//校准精度
+        int Savep = 0;
+        DateTime startTime = new DateTime();
+        DateTime finishTime = new DateTime();
 
 
 
@@ -282,8 +286,6 @@ namespace SaCar_vs
                 thresholds[i] = 0;
             }
 
-           
-
 
             this.DoubleBuffered = true;
 
@@ -293,7 +295,6 @@ namespace SaCar_vs
         private void uiButton1_Click(object sender, EventArgs e)
         {
             
- 
             try
             {
                 //将可能产生异常的代码放置在try块中
@@ -326,6 +327,7 @@ namespace SaCar_vs
                         uiButton2.Enabled = true;
                         uiButton1.Enabled = false;
                         uiButton3.Enabled = true;
+                        uiButton5.Enabled = true;
                     }
                     else
                     {
@@ -372,6 +374,8 @@ namespace SaCar_vs
                     uiButton2.Enabled = false;
                     uiButton1.Enabled = true;
                     uiButton3.Enabled = false;
+                    uiButton5.Enabled = false;
+                    uiButton6.Enabled = false;
                     CheckedData.Clear();
                     start = 0;
                     //开启端口扫描
@@ -600,15 +604,6 @@ namespace SaCar_vs
             
         }
 
-        private void uiButton5_Click(object sender, EventArgs e)
-        {
-            calibrationWindow = new calibration(numbers);//自定义校验窗口
-            calibrationWindow.WindowClosed += MyNewWindow_WindowClosed;
-            calibrationWindow.Show();
-      
-
-        }
-
         private void MyNewWindow_WindowClosed(object sender, double[] e)
         {
             for (int i = 0; i < 10; i++)
@@ -626,6 +621,356 @@ namespace SaCar_vs
             }
         }
 
+        private void uiButton4_Click(object sender, EventArgs e)
+        {
+            calibrationWindow = new calibration(numbers);//自定义校验窗口
+            calibrationWindow.WindowClosed += MyNewWindow_WindowClosed;
+            calibrationWindow.Show();
+        }
 
+        private void uiButton5_Click(object sender, EventArgs e)
+        {
+            uiButton5.Enabled = false;
+            uiButton6.Enabled = true;
+            startTime = System.DateTime.Now;
+            int temp = CheckedData.Count();
+            if (temp >= 40)
+            {
+                if (temp % 40 != 0)
+                {
+                    Savep = (temp / 40) * 40;
+                }
+            }
+            else
+            {
+                Savep = 0;
+            }
+
+        }
+
+        private void uiButton6_Click(object sender, EventArgs e)
+        {
+            uiButton5.Enabled = true;
+            uiButton6.Enabled = false;
+            finishTime = System.DateTime.Now;
+            List<byte> SaveDate = new List<byte>();
+            int cout = CheckedData.Count();
+            SaveDate.AddRange(CheckedData.GetRange(Savep, cout));
+            if (SaveDate.Equals(" "))
+            {
+                MessageBox.Show("接收数据为空，无需保存！");
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in SaveDate)
+            {
+                sb.Append(item.ToString() + ' ');
+            }
+            String recv_data = sb.ToString();
+
+            String fileName;
+
+            String fileNamereal1;
+            String fileNamereal2;
+            String fileNamereal3;
+            String fileNamereal4;
+            String fileNamereal5;
+            String fileNamereal6;
+            String fileNamereal7;
+            String fileNamereal8;
+            String fileNamereal9;
+            String fileNamereal10;
+
+            String fileNamelmag1;
+            String fileNamelmag2;
+            String fileNamelmag3;
+            String fileNamelmag4;
+            String fileNamelmag5;
+            String fileNamelmag6;
+            String fileNamelmag7;
+            String fileNamelmag8;
+            String fileNamelmag9;
+            String fileNamelmag10;
+
+            string foldPath;
+
+            // int mSCout = ((SaveDate.Count) / 40) * 20;
+            /*   double[] doubelSaveDate = new double[mSCout];//20个数为一组*/
+
+            int mSCout = ((SaveDate.Count) / 40);
+            List<int> real1 = new List<int>();
+            List<int> real2 = new List<int>();
+            List<int> real3 = new List<int>();
+            List<int> real4 = new List<int>();
+            List<int> real5 = new List<int>();
+            List<int> real6 = new List<int>();
+            List<int> real7 = new List<int>();
+            List<int> real8 = new List<int>();
+            List<int> real9 = new List<int>();
+            List<int> real10 = new List<int>();
+
+            List<int> lmag1 = new List<int>();
+            List<int> lmag2 = new List<int>();
+            List<int> lmag3 = new List<int>();
+            List<int> lmag4 = new List<int>();
+            List<int> lmag5 = new List<int>();
+            List<int> lmag6 = new List<int>();
+            List<int> lmag7 = new List<int>();
+            List<int> lmag8 = new List<int>();
+            List<int> lmag9 = new List<int>();
+            List<int> lmag10 = new List<int>();
+
+            for (int i = 0; i < mSCout; i++)
+            {
+                real1.Add(ToIntData(SaveDate[40 * i], SaveDate[40 * i + 1]));
+                lmag1.Add(ToIntData(SaveDate[40 * i + 2], SaveDate[40 * i + 3]));
+                real2.Add(ToIntData(SaveDate[40 * i + 4], SaveDate[40 * i + 5]));
+                lmag2.Add(ToIntData(SaveDate[40 * i + 6], SaveDate[40 * i + 7]));
+                real3.Add(ToIntData(SaveDate[40 * i + 8], SaveDate[40 * i + 9]));
+                lmag3.Add(ToIntData(SaveDate[40 * i + 10], SaveDate[40 * i + 11]));
+                real4.Add(ToIntData(SaveDate[40 * i + 12], SaveDate[40 * i + 13]));
+                lmag4.Add(ToIntData(SaveDate[40 * i + 14], SaveDate[40 * i + 15]));
+                real5.Add(ToIntData(SaveDate[40 * i + 16], SaveDate[40 * i + 17]));
+                lmag5.Add(ToIntData(SaveDate[40 * i + 18], SaveDate[40 * i + 19]));
+                real6.Add(ToIntData(SaveDate[40 * i + 20], SaveDate[40 * i + 21]));
+                lmag6.Add(ToIntData(SaveDate[40 * i + 22], SaveDate[40 * i + 23]));
+                real7.Add(ToIntData(SaveDate[40 * i + 24], SaveDate[40 * i + 25]));
+                lmag7.Add(ToIntData(SaveDate[40 * i + 26], SaveDate[40 * i + 27]));
+                real8.Add(ToIntData(SaveDate[40 * i + 28], SaveDate[40 * i + 29]));
+                lmag8.Add(ToIntData(SaveDate[40 * i + 30], SaveDate[40 * i + 31]));
+                real9.Add(ToIntData(SaveDate[40 * i + 32], SaveDate[40 * i + 33]));
+                lmag9.Add(ToIntData(SaveDate[40 * i + 34], SaveDate[40 * i + 35]));
+                real10.Add(ToIntData(SaveDate[40 * i + 36], SaveDate[40 * i + 37]));
+                lmag10.Add(ToIntData(SaveDate[40 * i + 38], SaveDate[40 * i + 39]));
+                /*doubelSaveDate[i] = ToData(SaveDate[2 * i], SaveDate[2 * i + 1]);*/
+            }
+
+            String real1_str = GetDataStr(real1);
+            String real2_str = GetDataStr(real2);
+            String real3_str = GetDataStr(real3);
+            String real4_str = GetDataStr(real4);
+            String real5_str = GetDataStr(real5);
+            String real6_str = GetDataStr(real6);
+            String real7_str = GetDataStr(real7);
+            String real8_str = GetDataStr(real8);
+            String real9_str = GetDataStr(real9);
+            String real10_str = GetDataStr(real10);
+
+            String lmag1_str = GetDataStr(lmag1);
+            String lmag2_str = GetDataStr(lmag2);
+            String lmag3_str = GetDataStr(lmag3);
+            String lmag4_str = GetDataStr(lmag4);
+            String lmag5_str = GetDataStr(lmag5);
+            String lmag6_str = GetDataStr(lmag6);
+            String lmag7_str = GetDataStr(lmag7);
+            String lmag8_str = GetDataStr(lmag8);
+            String lmag9_str = GetDataStr(lmag9);
+            String lmag10_str = GetDataStr(lmag10);
+
+            /* 弹出文件夹选择框供用户选择 */
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            dialog.Description = "请选择日志文件存储路径";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                foldPath = dialog.SelectedPath;
+            }
+            else
+            {
+                return;
+            }
+            TimeSpan span1 = finishTime - startTime;
+
+
+
+            fileName = foldPath + "\\" + "log" + "_" + "时长" + span1.ToString(@"mm\.ss") + "_" + "开始时间" + "_" + startTime.ToString("yyyy_MM_dd_HH_mm_ss") + ".txt";
+            fileNamereal1 = foldPath + "\\" + "log" + "_real1_" + ".txt";
+            fileNamereal2 = foldPath + "\\" + "log" + "_real2_" + ".txt";
+            fileNamereal3 = foldPath + "\\" + "log" + "_real3_" + ".txt";
+            fileNamereal4 = foldPath + "\\" + "log" + "_real4_" + ".txt";
+            fileNamereal5 = foldPath + "\\" + "log" + "_real5_" + ".txt";
+            fileNamereal6 = foldPath + "\\" + "log" + "_real6_" + ".txt";
+            fileNamereal7 = foldPath + "\\" + "log" + "_real7_" + ".txt";
+            fileNamereal8 = foldPath + "\\" + "log" + "_real8_" + ".txt";
+            fileNamereal9 = foldPath + "\\" + "log" + "_real9_" + ".txt";
+            fileNamereal10 = foldPath + "\\" + "log" + "_real10_" + ".txt";
+
+            fileNamelmag1 = foldPath + "\\" + "log" + "_lmag1_" + ".txt";
+            fileNamelmag2 = foldPath + "\\" + "log" + "_lmag2_" + ".txt";
+            fileNamelmag3 = foldPath + "\\" + "log" + "_lmag3_" + ".txt";
+            fileNamelmag4 = foldPath + "\\" + "log" + "_lmag4_" + ".txt";
+            fileNamelmag5 = foldPath + "\\" + "log" + "_lmag5_" + ".txt";
+            fileNamelmag6 = foldPath + "\\" + "log" + "_lmag6_" + ".txt";
+            fileNamelmag7 = foldPath + "\\" + "log" + "_lmag7_" + ".txt";
+            fileNamelmag8 = foldPath + "\\" + "log" + "_lmag8_" + ".txt";
+            fileNamelmag9 = foldPath + "\\" + "log" + "_lmag9_" + ".txt";
+            fileNamelmag10 = foldPath + "\\" + "log" + "_lmag10_" + ".txt";
+
+            try
+            {
+                /* 保存串口接收区的内容 */
+                //创建 FileStream 类的实例
+                FileStream fileStream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamreal1 = new FileStream(fileNamereal1, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamreal2 = new FileStream(fileNamereal2, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamreal3 = new FileStream(fileNamereal3, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamreal4 = new FileStream(fileNamereal4, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamreal5 = new FileStream(fileNamereal5, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamreal6 = new FileStream(fileNamereal6, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamreal7 = new FileStream(fileNamereal7, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamreal8 = new FileStream(fileNamereal8, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamreal9 = new FileStream(fileNamereal9, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamreal10 = new FileStream(fileNamereal10, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+
+                FileStream fileStreamlmag1 = new FileStream(fileNamelmag1, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamlmag2 = new FileStream(fileNamelmag2, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamlmag3 = new FileStream(fileNamelmag3, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamlmag4 = new FileStream(fileNamelmag4, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamlmag5 = new FileStream(fileNamelmag5, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamlmag6 = new FileStream(fileNamelmag6, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamlmag7 = new FileStream(fileNamelmag7, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamlmag8 = new FileStream(fileNamelmag8, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamlmag9 = new FileStream(fileNamelmag9, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                FileStream fileStreamlmag10 = new FileStream(fileNamelmag10, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+
+                //将字符串转换为字节数组
+                byte[] bytes = Encoding.UTF8.GetBytes(recv_data);
+                byte[] bytes_real1 = Encoding.UTF8.GetBytes(real1_str);
+                byte[] bytes_real2 = Encoding.UTF8.GetBytes(real2_str);
+                byte[] bytes_real3 = Encoding.UTF8.GetBytes(real3_str);
+                byte[] bytes_real4 = Encoding.UTF8.GetBytes(real4_str);
+                byte[] bytes_real5 = Encoding.UTF8.GetBytes(real5_str);
+                byte[] bytes_real6 = Encoding.UTF8.GetBytes(real6_str);
+                byte[] bytes_real7 = Encoding.UTF8.GetBytes(real7_str);
+                byte[] bytes_real8 = Encoding.UTF8.GetBytes(real8_str);
+                byte[] bytes_real9 = Encoding.UTF8.GetBytes(real9_str);
+                byte[] bytes_real10 = Encoding.UTF8.GetBytes(real10_str);
+
+                byte[] bytes_lmag1 = Encoding.UTF8.GetBytes(lmag1_str);
+                byte[] bytes_lmag2 = Encoding.UTF8.GetBytes(lmag2_str);
+                byte[] bytes_lmag3 = Encoding.UTF8.GetBytes(lmag3_str);
+                byte[] bytes_lmag4 = Encoding.UTF8.GetBytes(lmag4_str);
+                byte[] bytes_lmag5 = Encoding.UTF8.GetBytes(lmag5_str);
+                byte[] bytes_lmag6 = Encoding.UTF8.GetBytes(lmag6_str);
+                byte[] bytes_lmag7 = Encoding.UTF8.GetBytes(lmag7_str);
+                byte[] bytes_lmag8 = Encoding.UTF8.GetBytes(lmag8_str);
+                byte[] bytes_lmag9 = Encoding.UTF8.GetBytes(lmag9_str);
+                byte[] bytes_lmag10 = Encoding.UTF8.GetBytes(lmag10_str);
+
+
+                //向文件中写入字节数组
+                fileStream.Write(bytes, 0, bytes.Length);
+                fileStreamreal1.Write(bytes_real1, 0, bytes_real1.Length);
+                fileStreamlmag1.Write(bytes_lmag1, 0, bytes_lmag1.Length);
+
+                fileStreamreal2.Write(bytes_real2, 0, bytes_real2.Length);
+                fileStreamlmag2.Write(bytes_lmag2, 0, bytes_lmag2.Length);
+
+                fileStreamreal3.Write(bytes_real3, 0, bytes_real3.Length);
+                fileStreamlmag3.Write(bytes_lmag3, 0, bytes_lmag3.Length);
+
+                fileStreamreal4.Write(bytes_real4, 0, bytes_real4.Length);
+                fileStreamlmag4.Write(bytes_lmag4, 0, bytes_lmag4.Length);
+
+                fileStreamreal5.Write(bytes_real5, 0, bytes_real5.Length);
+                fileStreamlmag5.Write(bytes_lmag5, 0, bytes_lmag5.Length);
+
+                fileStreamreal6.Write(bytes_real6, 0, bytes_real6.Length);
+                fileStreamlmag6.Write(bytes_lmag6, 0, bytes_lmag6.Length);
+
+                fileStreamreal7.Write(bytes_real7, 0, bytes_real7.Length);
+                fileStreamlmag7.Write(bytes_lmag7, 0, bytes_lmag7.Length);
+
+                fileStreamreal8.Write(bytes_real8, 0, bytes_real8.Length);
+                fileStreamlmag8.Write(bytes_lmag8, 0, bytes_lmag8.Length);
+
+                fileStreamreal9.Write(bytes_real9, 0, bytes_real9.Length);
+                fileStreamlmag9.Write(bytes_lmag9, 0, bytes_lmag9.Length);
+
+                fileStreamreal10.Write(bytes_real10, 0, bytes_real10.Length);
+                fileStreamlmag10.Write(bytes_lmag10, 0, bytes_lmag10.Length);
+
+                //刷新缓冲区
+                fileStream.Flush();
+                fileStreamreal1.Flush();
+                fileStreamreal2.Flush();
+                fileStreamreal3.Flush();
+                fileStreamreal4.Flush();
+                fileStreamreal5.Flush();
+                fileStreamreal6.Flush();
+                fileStreamreal7.Flush();
+                fileStreamreal8.Flush();
+                fileStreamreal9.Flush();
+                fileStreamreal10.Flush();
+
+                fileStreamlmag1.Flush();
+                fileStreamlmag2.Flush();
+                fileStreamlmag3.Flush();
+                fileStreamlmag4.Flush();
+                fileStreamlmag5.Flush();
+                fileStreamlmag6.Flush();
+                fileStreamlmag7.Flush();
+                fileStreamlmag8.Flush();
+                fileStreamlmag9.Flush();
+                fileStreamlmag10.Flush();
+
+                //关闭流
+                fileStream.Close();
+                fileStreamreal1.Close();
+                fileStreamreal2.Close();
+                fileStreamreal3.Close();
+                fileStreamreal4.Close();
+                fileStreamreal5.Close();
+                fileStreamreal6.Close();
+                fileStreamreal7.Close();
+                fileStreamreal8.Close();
+                fileStreamreal9.Close();
+                fileStreamreal10.Close();
+
+                fileStreamlmag1.Close();
+                fileStreamlmag2.Close();
+                fileStreamlmag3.Close();
+                fileStreamlmag4.Close();
+                fileStreamlmag5.Close();
+                fileStreamlmag6.Close();
+                fileStreamlmag7.Close();
+                fileStreamlmag8.Close();
+                fileStreamlmag9.Close();
+                fileStreamlmag10.Close();
+
+                //提示用户
+                MessageBox.Show("日志已保存!(" + fileNamereal1 + ")");
+                //ToMatlab(real1);
+            }
+            catch (Exception ex)
+            {
+                //提示用户
+                MessageBox.Show("发生异常!(" + ex.ToString() + ")");
+            }
+
+
+        }
+
+        private string GetDataStr(List<int> list)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in list)
+            {
+                sb.Append(item.ToString() + ' ');
+            }
+            //int listDev = maxListDev(list);
+            //sb.Append("该通道的最大差值为：" + listDev.ToString() + '\n');
+
+            return sb.ToString();
+        }
+
+        private int ToIntData(byte lowByte, byte highByte)
+        {
+            short rawValue = (short)((highByte << 8) | lowByte); // convert to signed short
+
+            int signedValue = Convert.ToInt32(rawValue); // convert to signed double
+
+            return signedValue;
+        }
     }
 }
