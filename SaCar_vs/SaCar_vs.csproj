@@ -117,6 +117,7 @@
     <None Include="无背景logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="无背景logos.png" />
     <Content Include="竖logo小.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

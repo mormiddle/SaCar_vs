@@ -17,7 +17,6 @@ H:\SACAR\SaCar\SaCar_vs\SaCar_vs\bin\Debug\SaCar_vs.exe
 H:\SACAR\SaCar\SaCar_vs\SaCar_vs\bin\Debug\SaCar_vs.pdb
 H:\SACAR\SaCar\SaCar_vs\SaCar_vs\bin\Debug\SunnyUI.Common.dll
 H:\SACAR\SaCar\SaCar_vs\SaCar_vs\bin\Debug\SunnyUI.dll
-H:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.csproj.AssemblyReference.cache
 H:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.Form1.resources
 H:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.Mypanel.resources
 H:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.Properties.Resources.resources
@@ -28,3 +27,4 @@ H:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.exe
 H:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.pdb
 H:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.calibration.resources
 F:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.calibration.resources
+H:\SACAR\SaCar\SaCar_vs\SaCar_vs\obj\Debug\SaCar_vs.csproj.AssemblyReference.cache

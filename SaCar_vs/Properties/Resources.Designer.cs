@@ -73,6 +73,16 @@ namespace SaCar_vs.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 无背景logos {
+            get {
+                object obj = ResourceManager.GetObject("无背景logos", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 横板logo {
             get {
                 object obj = ResourceManager.GetObject("横板logo", resourceCulture);
